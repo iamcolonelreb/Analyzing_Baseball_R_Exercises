@@ -20,12 +20,11 @@
                                 list(HALF.INNING = data2013$HALF.INNING), sum)
   RUNS.SCORED.START <- aggregate(data2013$RUNS, 
                                list(HALF.INNING = data2013$HALF.INNING), "[", 1)
+  load(data.table)
+# Using the data.table package will greatly speed up the merge process
   MAX <- data.table(HALF.INNING=RUNS.SCORED.START$HALF.INNING)
   MAX$x <- RUNS.SCORED.INNING$x + RUNS.SCORED.START$x
-  data2013<-left_join(data2013,MAX)
-  data2013<-left_join(data2013,MAX)
-  # perform left_join, merge slowed my computer down to a halt, and froze R
-  # if you know of a more efficient way feel free to elaborate and change
+  data2013<-merge(data2013,MAX)
   N <- ncol(data2013)
   names(data2013)[N] <- "MAX.RUNS"
   data2013$RUNS.ROI <- with(data2013, MAX.RUNS - RUNS)
